@@ -1,0 +1,19 @@
+#DLoad balancer service
+#Access for SQL server and DxE management
+apiVersion: v1
+kind: Service
+metadata:
+  name: dxemssql-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: dxemssql
+  ports:
+  - name: sql
+    protocol: TCP
+    port: 1433
+    targetPort: 1433
+  - name: dxe
+    protocol: TCP
+    port: 7979
+    targetPort: 7979

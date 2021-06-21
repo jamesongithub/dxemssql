@@ -1,0 +1,114 @@
+#DxE + MSSQL StatefulSet without load balancing
+#Must assign nodes with correct nodeSelector label
+
+#Primary replica
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dxemssql-primary
+spec:
+  serviceName: "dxemssql-primary"
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: dxemssql
+  template:
+    metadata:
+      labels:
+        app: dxemssql
+    spec:
+      securityContext:
+        fsGroup: 10001
+      containers:
+      - name: dxemssql
+        image: dh2i/dxemssql
+        env:
+        - name: ACCEPT_EULA
+          value: "Y" 
+        - name: MSSQL_ENABLE_HADR
+          value: "1"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssql
+              key: SA_PASSWORD
+        volumeMounts:
+        - name: dxe
+          mountPath: "/etc/dh2i"
+        - name: mssql
+          mountPath: "/var/opt/mssql"
+      nodeSelector:
+        role: ags-primary
+  volumeClaimTemplates:
+  - metadata:
+      name: dxe
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+  - metadata:
+      name: mssql
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 8Gi
+---
+#Secondary replicas
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dxemssql-secondary
+spec:
+  serviceName: "dxemssql-secondary"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dxemssql
+  template:
+    metadata:
+      labels:
+        app: dxemssql
+    spec:
+      securityContext:
+        fsGroup: 10001
+      containers:
+      - name: dxemssql
+        image: dh2i/dxemssql
+        env:
+        - name: ACCEPT_EULA
+          value: "Y" 
+        - name: MSSQL_ENABLE_HADR
+          value: "1"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssql
+              key: SA_PASSWORD
+        volumeMounts:
+        - name: dxe
+          mountPath: "/etc/dh2i"
+        - name: mssql
+          mountPath: "/var/opt/mssql"
+      nodeSelector:
+        role: ags-secondary
+  volumeClaimTemplates:
+  - metadata:
+      name: dxe
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+  - metadata:
+      name: mssql
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 8Gi
