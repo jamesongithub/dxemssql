@@ -1,0 +1,53 @@
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: dxemssql-primary-0 
+spec: 
+  type: LoadBalancer 
+  selector: 
+    statefulset.kubernetes.io/pod-name: dxemssql-primary-0 
+  ports: 
+  - name: sql 
+    protocol: TCP 
+    port: 1433 
+    targetPort: 1433 
+  - name: dxe 
+    protocol: TCP 
+    port: 7979 
+    targetPort: 7979 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: dxemssql-secondary-0 
+spec: 
+  type: LoadBalancer 
+  selector: 
+    statefulset.kubernetes.io/pod-name: dxemssql-secondary-0 
+  ports: 
+  - name: sql 
+    protocol: TCP 
+    port: 1433 
+    targetPort: 1433 
+  - name: dxe 
+    protocol: TCP 
+    port: 7979 
+    targetPort: 7979 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: dxemssql-secondary-1 
+spec: 
+  type: LoadBalancer 
+  selector: 
+    statefulset.kubernetes.io/pod-name: dxemssql-secondary-1 
+  ports: 
+  - name: sql 
+    protocol: TCP 
+    port: 1433 
+    targetPort: 1433 
+  - name: dxe 
+    protocol: TCP 
+    port: 7979 
+    targetPort: 7979
