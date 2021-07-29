@@ -4,17 +4,25 @@ metadata:
   name: dxemssql-primary-0 
 spec: 
   type: LoadBalancer 
-  selector: 
+  selector:
+    #Assigns load balancer to specific pod
     statefulset.kubernetes.io/pod-name: dxemssql-primary-0 
   ports: 
+    #SQL Server port
   - name: sql 
     protocol: TCP 
     port: 1433 
-    targetPort: 1433 
+    targetPort: 1433
+    #SQL listener port
+  - name: listener
+    protocol: TCP
+    port: 11433
+    targetPort: 11433
+    #DxEnterprise admin port
   - name: dxe 
     protocol: TCP 
     port: 7979 
-    targetPort: 7979 
+    targetPort: 7979
 --- 
 apiVersion: v1 
 kind: Service 
@@ -29,6 +37,10 @@ spec:
     protocol: TCP 
     port: 1433 
     targetPort: 1433 
+  - name: listener
+    protocol: TCP
+    port: 11433
+    targetPort: 11433
   - name: dxe 
     protocol: TCP 
     port: 7979 
@@ -47,6 +59,10 @@ spec:
     protocol: TCP 
     port: 1433 
     targetPort: 1433 
+  - name: listener
+    protocol: TCP
+    port: 11433
+    targetPort: 11433
   - name: dxe 
     protocol: TCP 
     port: 7979 
