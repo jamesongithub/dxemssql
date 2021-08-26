@@ -1,14 +1,14 @@
 FROM mcr.microsoft.com/mssql/server:2019-latest
 USER root
 
-#Install dotnet and iproute2
+#Install dotnet and net-tools
 RUN apt-get update \
    && ACCEPT_EULA=Y apt-get upgrade -y \
    && apt-get install -y wget \
    && wget --no-dns-cache https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
    && dpkg -i packages-microsoft-prod.deb \
    && apt-get update \
-   && apt-get install -y dotnet-runtime-3.1 iproute2 \
+   && apt-get install -y dotnet-runtime-3.1 net-tools \
    && dpkg --purge packages-microsoft-prod \
    && apt-get purge -y wget \
    && apt-get clean \
