@@ -24,6 +24,7 @@ RUN tar zxvf dxe.tgz && rm dxe.tgz \
 #Finish setup
 EXPOSE 7979 7985
 ENV DX_HAS_MSSQLSERVER=1 \
-   XDG_CONFIG_HOME=/etc/dh2i
+   XDG_CONFIG_HOME=/etc/dh2i \
+   MSSQL_ENABLE_HADR=1
 USER mssql
 ENTRYPOINT ["/opt/dh2i/sbin/dxstart.sh"]
