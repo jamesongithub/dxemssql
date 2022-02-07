@@ -16,8 +16,8 @@ spec:
     #SQL listener port
   - name: listener
     protocol: TCP
-    port: 11433
-    targetPort: 11433
+    port: 14033
+    targetPort: 14033
     #DxEnterprise admin port
   - name: dxe 
     protocol: TCP 
@@ -39,8 +39,8 @@ spec:
     targetPort: 1433 
   - name: listener
     protocol: TCP
-    port: 11433
-    targetPort: 11433
+    port: 14033
+    targetPort: 14033
   - name: dxe 
     protocol: TCP 
     port: 7979 
@@ -61,8 +61,8 @@ spec:
     targetPort: 1433 
   - name: listener
     protocol: TCP
-    port: 11433
-    targetPort: 11433
+    port: 14033
+    targetPort: 14033
   - name: dxe 
     protocol: TCP 
     port: 7979 
