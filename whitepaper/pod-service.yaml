@@ -1,0 +1,28 @@
+#Example load balancer service
+#Create a service for each pod in the StatefulSet using this template
+apiVersion: v1
+kind: Service
+metadata:
+  #Unique name
+  name: dxemssql-0-lb
+spec:
+  type: LoadBalancer
+  #Static IP pre-provisioned in Azure
+  loadBalancerIP: <lb_ip>
+  selector:
+    #Assign the load balancer to a specific pod 
+    #(e.g., dxemssql-0, dxemssql-1, or dxemssql-2)
+    statefulset.kubernetes.io/pod-name: <pod_name>
+  ports:
+  - name: sql
+    protocol: TCP
+    port: 1433
+    targetPort: 1433
+  - name: listener
+    protocol: TCP
+    port: 14033
+    targetPort: 14033
+  - name: dxe
+    protocol: TCP
+    port: 7979
+    targetPort: 7979
